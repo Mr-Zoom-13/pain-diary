@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -101,7 +101,7 @@
      <attribute name="title">
       <string>Графики</string>
      </attribute>
-     <widget class="QPushButton" name="cretae_graph">
+     <widget class="QPushButton" name="create_graph">
       <property name="geometry">
        <rect>
         <x>340</x>
