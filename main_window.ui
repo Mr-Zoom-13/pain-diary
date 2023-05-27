@@ -53,6 +53,49 @@
        <string>Создать</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>10</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Сортировать по: </string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="table_filter">
+      <property name="geometry">
+       <rect>
+        <x>460</x>
+        <y>10</y>
+        <width>161</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <item>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Дате</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Продолжительности</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Интенсивности</string>
+       </property>
+      </item>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
