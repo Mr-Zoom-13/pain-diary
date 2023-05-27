@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, \
     QVBoxLayout, QWidget, QAbstractItemView, QPushButton, QDialog
 from PyQt5 import uic
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QPixmap
 import sys
 import sqlite3
 from datetime import datetime
@@ -34,6 +34,9 @@ class MainWindow(QMainWindow):
         # Connecting saving graphs
         self.create_graph.clicked.connect(self.save_graphs)
 
+        # Filling graphs
+        self.save_graphs()
+
     def fill_table(self):
         self.table.clearContents()
         if self.table_filter.currentText() == '-':
@@ -58,6 +61,7 @@ class MainWindow(QMainWindow):
             item_delete.setBackground(QColor(255, 0, 0))
             self.table.setItem(i, len(value), item_edit)
             self.table.setItem(i, len(value) + 1, item_delete)
+        self.table.resizeColumnsToContents()
 
     def open_dialog_new_seizure(self):
         self.form_new_seizure = DialogNewSeizure()
@@ -157,6 +161,12 @@ class MainWindow(QMainWindow):
             plt.plot(dates, values_duration)
             plt.title('Продолжительность(в мин)')
             plt.savefig('saved_figure_duration.png')
+            pix_frequency = QPixmap('saved_figure_frequency.png')
+            self.graph_frequency.setPixmap(pix_frequency)
+            self.graph_frequency.setScaledContents(True)
+            pix_duration = QPixmap('saved_figure_duration.png')
+            self.graph_duration.setPixmap(pix_duration)
+            self.graph_duration.setScaledContents(True)
 
 
 class DialogNewSeizure(QDialog):
@@ -178,6 +188,7 @@ def except_hook(cls, exception, traceback):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     form = MainWindow()
+    form.setFixedSize(721, 600)
     form.show()
     sys.excepthook = except_hook
     sys.exit(app.exec())
