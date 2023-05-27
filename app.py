@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
 
     def open_dialog_new_seizure(self):
         self.form_new_seizure = DialogNewSeizure()
-        self.form_new_seizure.date_time.setDate(datetime.now())
+        self.form_new_seizure.date_time.setDateTime(datetime.now())
         self.form_new_seizure.show()
         self.form_new_seizure.buttonBox.accepted.connect(self.create_new_seizure)
 
@@ -74,12 +74,13 @@ class MainWindow(QMainWindow):
         strength = self.form_new_seizure.strength.text()
         symptomatic = self.form_new_seizure.symptomatic.text()
         reason = self.form_new_seizure.reason.text()
-        date = self.form_new_seizure.date_time.date().toPyDate()
+        date = self.form_new_seizure.date_time.dateTime().toPyDateTime()
+        new_date = f'{date.year}-{date.month}-{date.day} {date.hour}:{date.minute}'
         try:
             duration = int(duration)
             self.cur.execute(
                 'INSERT INTO Seizures(duration, strength, symptomatic, reason, date) VALUES(?, ?, ?, ?, ?)',
-                (duration, strength, symptomatic, reason, date))
+                (duration, strength, symptomatic, reason, new_date))
             self.con.commit()
             self.fill_table()
         except ValueError:
@@ -94,8 +95,8 @@ class MainWindow(QMainWindow):
             self.form_new_seizure.strength.setText(self.table.item(item.row(), 2).text())
             self.form_new_seizure.symptomatic.setText(self.table.item(item.row(), 3).text())
             self.form_new_seizure.reason.setText(self.table.item(item.row(), 4).text())
-            self.form_new_seizure.date_time.setDate(
-                datetime.strptime(self.table.item(item.row(), 5).text(), '%Y-%m-%d'))
+            self.form_new_seizure.date_time.setDateTime(
+                datetime.strptime(self.table.item(item.row(), 5).text(), '%Y-%m-%d %H:%M'))
             self.form_new_seizure.buttonBox.accepted.connect(self.refactor_seizure)
             self.form_new_seizure.show()
         elif item.text() == 'Удалить':
@@ -113,12 +114,13 @@ class MainWindow(QMainWindow):
         strength = self.form_new_seizure.strength.text()
         symptomatic = self.form_new_seizure.symptomatic.text()
         reason = self.form_new_seizure.reason.text()
-        date = self.form_new_seizure.date_time.date().toPyDate()
+        date = self.form_new_seizure.date_time.dateTime().toPyDateTime()
+        new_date = f'{date.year}-{date.month}-{date.day} {date.hour}:{date.minute}'
         try:
             duration = int(duration)
             self.cur.execute(
                 'UPDATE Seizures SET duration=?, strength=?, symptomatic=?, reason=?, date=? WHERE id=?',
-                (duration, strength, symptomatic, reason, date, self.last_id))
+                (duration, strength, symptomatic, reason, new_date, self.last_id))
             self.con.commit()
             self.fill_table()
         except ValueError:
@@ -127,7 +129,7 @@ class MainWindow(QMainWindow):
     def save_graphs(self):
         every = self.cur.execute('SELECT * FROM Seizures ORDER BY date').fetchall()
         if len(every):
-            dates = [every[-1][5]]
+            dates = [every[-1][5].split(' ')[0]]
             values_frequency = [1]
             values_duration = []
             cur = every[-1][1]
@@ -135,12 +137,12 @@ class MainWindow(QMainWindow):
             itog = 7
             i = len(every) - 2
             while itog:
-                if every[i][5] == dates[-1]:
+                if every[i][5].split(' ')[0] == dates[-1]:
                     values_frequency[-1] += 1
                     cur += every[i][1]
                     length += 1
                 else:
-                    dates.append(every[i][5])
+                    dates.append(every[i][5].split(' ')[0])
                     values_frequency.append(1)
                     values_duration.append(round(cur / length, 1))
                     cur = every[i][1]

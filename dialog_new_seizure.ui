@@ -174,12 +174,12 @@
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
-  <widget class="QDateEdit" name="date_time">
+  <widget class="QDateTimeEdit" name="date_time">
    <property name="geometry">
     <rect>
      <x>280</x>
      <y>220</y>
-     <width>110</width>
+     <width>194</width>
      <height>22</height>
     </rect>
    </property>
